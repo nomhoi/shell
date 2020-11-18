@@ -84,12 +84,6 @@ int main (int argc, char ** argv) {
             close(pipe_to_master[1]);
             close(pipe_to_master[0]);
 
-//            dup2(STDERR_FILENO, STDOUT_FILENO);
-//            close(STDERR_FILENO);
-
-//            dup2(STDOUT_FILENO, STDERR_FILENO);
-//            close(STDERR_FILENO);
-
             vector<string> cmd = split(command);
             char *argv[cmd.size() + 1];
             for (unsigned int i = 0; i < cmd.size(); i++) {
