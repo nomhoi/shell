@@ -5,7 +5,9 @@
 #include <sstream>
 #include <fstream>
 
-//#include <boost/algorithm/string.hpp>
+#include <algorithm>
+#include <cctype>
+#include <locale>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -14,6 +16,26 @@
 
 using namespace std;
 
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
+
 const vector<string> split(const string& line, const char& delimeter = ' ')
 {
     vector<string> tokens;
@@ -21,7 +43,7 @@ const vector<string> split(const string& line, const char& delimeter = ' ')
     string token;
     while(getline(stream, token, delimeter)) {
         if (token.size() > 0) {
-            //boost::trim(token);
+            trim(token);
             tokens.push_back(token);
         }
     }
@@ -61,6 +83,12 @@ int main (int argc, char ** argv) {
             dup2(pipe_to_master[1], STDOUT_FILENO);
             close(pipe_to_master[1]);
             close(pipe_to_master[0]);
+
+//            dup2(STDERR_FILENO, STDOUT_FILENO);
+//            close(STDERR_FILENO);
+
+//            dup2(STDOUT_FILENO, STDERR_FILENO);
+//            close(STDERR_FILENO);
 
             vector<string> cmd = split(command);
             char *argv[cmd.size() + 1];
