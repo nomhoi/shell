@@ -5,7 +5,7 @@
 #include <sstream>
 #include <fstream>
 
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -21,7 +21,7 @@ const vector<string> split(const string& line, const char& delimeter = ' ')
     string token;
     while(getline(stream, token, delimeter)) {
         if (token.size() > 0) {
-            boost::trim(token);
+            //boost::trim(token);
             tokens.push_back(token);
         }
     }
